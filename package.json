@@ -15,7 +15,6 @@
     "seed": "npx tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@next/swc-win32-x64-msvc": "^16.2.10",
     "@prisma/client": "^5.17.0",
     "@tanstack/react-query": "^5.29.2",
     "bcryptjs": "^2.4.3",
