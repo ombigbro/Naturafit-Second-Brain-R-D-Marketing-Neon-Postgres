@@ -1,0 +1,48 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  role         Role      @default(ADMIN)
+  projects     Project[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model GlobalSettings {
+  id                  Int     @id @default(1)
+  ai_text_key         String
+  ai_text_model       String  @default("gpt-4")
+  ai_image_key        String
+  ai_image_model      String  @default("dall-e-3")
+  master_template_url String?
+  phase_1_prompt      String  @db.Text
+  phase_2_prompt      String  @db.Text
+  phase_3_prompt      String  @db.Text
+  phase_4_prompt      String  @db.Text
+}
+
+model Project {
+  id            String   @id @default(uuid())
+  name          String
+  admin_id      String
+  admin         User     @relation(fields: [admin_id], references: [id], onDelete: Cascade)
+  phase_1_state Json?
+  phase_2_state Json?
+  phase_3_state Json?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

@@ -1,0 +1,43 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  role         String    @default("ADMIN") // "SUPER_ADMIN" or "ADMIN"
+  projects     Project[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model GlobalSettings {
+  id                  Int     @id @default(1)
+  ai_text_key         String
+  ai_text_model       String  @default("gpt-4")
+  ai_image_key        String
+  ai_image_model      String  @default("dall-e-3")
+  master_template_url String?
+  phase_1_prompt      String
+  phase_2_prompt      String
+  phase_3_prompt      String
+  phase_4_prompt      String
+}
+
+model Project {
+  id            String   @id @default(uuid())
+  name          String
+  admin_id      String
+  admin         User     @relation(fields: [admin_id], references: [id], onDelete: Cascade)
+  phase_1_state String?  // Store as stringified JSON
+  phase_2_state String?  // Store as stringified JSON
+  phase_3_state String?  // Store as stringified JSON
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
