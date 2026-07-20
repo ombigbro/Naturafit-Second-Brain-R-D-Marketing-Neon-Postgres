@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import db from '@/lib/db';
 import { getSessionUser } from '@/lib/auth';
+import { Prisma } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,6 +17,7 @@ export async function DELETE(
 
     const project = await db.project.findUnique({
       where: { id: params.id },
+      select: { admin_id: true },
     });
 
     if (!project) {
@@ -29,7 +31,7 @@ export async function DELETE(
     await db.project.update({
       where: { id: params.id },
       data: {
-        phase_2_state: null as any,
+        phase_2_state: Prisma.DbNull,
       },
     });
 
