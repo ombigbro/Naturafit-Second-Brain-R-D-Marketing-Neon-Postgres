@@ -1,6 +1,7 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -43,6 +44,7 @@ model Project {
   phase_1_state Json?
   phase_2_state Json?
   phase_3_state Json?
+  phase_4_state Json?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }

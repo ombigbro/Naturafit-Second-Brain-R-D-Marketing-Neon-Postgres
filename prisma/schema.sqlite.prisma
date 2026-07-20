@@ -38,6 +38,7 @@ model Project {
   phase_1_state String?  // Store as stringified JSON
   phase_2_state String?  // Store as stringified JSON
   phase_3_state String?  // Store as stringified JSON
+  phase_4_state String?  // Store as stringified JSON
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
