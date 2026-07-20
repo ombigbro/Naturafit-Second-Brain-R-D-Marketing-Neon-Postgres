@@ -29,7 +29,7 @@ export async function DELETE(
     await db.project.update({
       where: { id: params.id },
       data: {
-        phase_2_state: null,
+        phase_2_state: null as any,
       },
     });
 

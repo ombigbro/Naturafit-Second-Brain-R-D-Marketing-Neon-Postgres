@@ -87,7 +87,7 @@ export async function DELETE(
     await db.project.update({
       where: { id: params.id },
       data: {
-        phase_3_state: null,
+        phase_3_state: null as any,
       },
     });
 
