@@ -76,4 +76,35 @@ We completed the **Phase 4: Pitch Deck PDF Export** feature flow.
 ### **4. Instructions for next AI Session**
 All planned features (Features 1 through 5) are 100% completed, fully type-safe, compile correctly, and are verified by TypeScript build runs. Ready for deployment and production launch!
 
+---
+
+### **5. GitHub Push & Vercel Neon PostgreSQL Deployment Log**
+
+#### **Git Repositories & Remotes**:
+- **Primary Repo (`origin`)**: [https://github.com/ombigbro/Naturafit-Second-Brain-R-D-Marketing.git](https://github.com/ombigbro/Naturafit-Second-Brain-R-D-Marketing.git)
+- **Neon PostgreSQL Repo (`neon-postgres`)**: [https://github.com/ombigbro/Naturafit-Second-Brain-R-D-Marketing-Neon-Postgres.git](https://github.com/ombigbro/Naturafit-Second-Brain-R-D-Marketing-Neon-Postgres.git)
+
+#### **Audit & Database Enhancements**:
+- **Prisma Schema Parity**: Added missing `phase_4_state` field (`Json?` in `schema.postgres.prisma` / `String?` in `schema.sqlite.prisma`).
+- **Neon Connection Pooling**: Configured `directUrl = env("DIRECT_URL")` in `schema.postgres.prisma` for Neon's PgBouncer direct migrations vs pooled queries.
+- **Production Provider**: Configured `schema.prisma` to default to `postgresql` provider.
+
+#### **Vercel Build & Runtime Fixes**:
+1. **Platform Binary Fix (`EBADPLATFORM`)**:
+   - Removed platform-specific `@next/swc-win32-x64-msvc` from `package.json` dependencies and `package-lock.json`.
+   - Purged untracked/legacy `temp-app/package-lock.json` and added `temp-app/` to `.gitignore`.
+2. **Prisma Type Safety & ESLint Compliance**:
+   - Replaced `null as any` with Prisma's official typed constant `Prisma.DbNull` across all API reset route handlers (`phase1`, `phase2`, `phase3`, `phase4`).
+   - Verified `tsc --noEmit` and `eslint` execute with 0 errors/warnings.
+3. **Vercel 500 Runtime Fix (`clientModules undefined`)**:
+   - Removed `outputFileTracing: false` from `next.config.mjs` to allow Next.js Node File Tracing (NFT) to bundle client module manifests into Vercel Serverless Functions.
+   - Added `experimental: { serverComponentsExternalPackages: ['pdfkit', '@prisma/client'] }` in `next.config.mjs`.
+
+#### **Vercel Environment Variables Checklist**:
+- `DATABASE_URL`: Neon pooled connection URL (`postgresql://...pooler...neon.tech/neondb?sslmode=require`)
+- `DIRECT_URL`: Neon direct connection URL (`postgresql://...neon.tech/neondb?sslmode=require`)
+- `JWT_SECRET`: Secret key for JWT sessions
+- `STORAGE_DIR`: Local/serverless storage path (e.g. `/tmp`)
+
+
 
