@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  outputFileTracing: false,
+  experimental: {
+    serverComponentsExternalPackages: ['pdfkit', '@prisma/client'],
+  },
 };
 
 export default nextConfig;
