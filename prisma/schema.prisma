@@ -1,23 +1,17 @@
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 generator client {
   provider = "prisma-client-js"
 }
 
-enum Role {
-  SUPER_ADMIN
-  ADMIN
-}
-
 model User {
   id           String    @id @default(uuid())
   email        String    @unique
   passwordHash String
-  role         Role      @default(ADMIN)
+  role         String    @default("ADMIN") // "SUPER_ADMIN" or "ADMIN"
   projects     Project[]
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
@@ -30,10 +24,10 @@ model GlobalSettings {
   ai_image_key        String
   ai_image_model      String  @default("dall-e-3")
   master_template_url String?
-  phase_1_prompt      String  @db.Text
-  phase_2_prompt      String  @db.Text
-  phase_3_prompt      String  @db.Text
-  phase_4_prompt      String  @db.Text
+  phase_1_prompt      String
+  phase_2_prompt      String
+  phase_3_prompt      String
+  phase_4_prompt      String
 }
 
 model Project {
@@ -41,10 +35,10 @@ model Project {
   name          String
   admin_id      String
   admin         User     @relation(fields: [admin_id], references: [id], onDelete: Cascade)
-  phase_1_state Json?
-  phase_2_state Json?
-  phase_3_state Json?
-  phase_4_state Json?
+  phase_1_state String?  // Store as stringified JSON
+  phase_2_state String?  // Store as stringified JSON
+  phase_3_state String?  // Store as stringified JSON
+  phase_4_state String?  // Store as stringified JSON
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }
