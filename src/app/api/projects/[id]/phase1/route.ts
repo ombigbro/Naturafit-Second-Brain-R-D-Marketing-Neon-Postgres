@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import * as XLSX from 'xlsx';
 import db, { serializeState } from '@/lib/db';
 import { getSessionUser } from '@/lib/auth';
-import { Prisma } from '@prisma/client';
+
 
 export const dynamic = 'force-dynamic';
 
@@ -367,7 +367,7 @@ export async function DELETE(
     await db.project.update({
       where: { id: params.id },
       data: {
-        phase_1_state: Prisma.DbNull,
+        phase_1_state: null as never,
       },
     });
 
